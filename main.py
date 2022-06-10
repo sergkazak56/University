@@ -35,7 +35,7 @@ class Student:
         if count_rating:
             return round(sum_rating/count_rating, 1)
         else:
-            return 'У студента пока нет оценок'
+            return 0.0
 
     def __str__(self):
         res_string =  f'Имя:{" " * 32}{self.name}\n'
@@ -44,6 +44,24 @@ class Student:
         res_string += f'Курсы в процессе изучения:{" " * 10}{str(self.courses_in_progress).strip("[]")}\n'
         res_string += f'Завершенные курсы:{" " * 18}{str(self.finished_courses).strip("[]")}'
         return res_string
+
+    def __lt__(self, other):
+        if isinstance(other, Student):
+            return self.__average_rating() < other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
+
+    def __eq__(self, other):
+        if isinstance(other, Student):
+            return self.__average_rating() == other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
+
+    def __le__(self, other):
+        if isinstance(other, Student):
+            return self.__average_rating() <= other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
 
 class Mentor:
     def __init__(self, name, surname):
@@ -79,10 +97,28 @@ class Lecturer(Mentor):
         if count_rating:
             return round(sum_rating/count_rating, 1)
         else:
-            return 'У лектора пока нет оценок'
+            return 0.0
 
     def __str__(self):
         return f'Имя:{" " * 22}{self.name}\nФамилия:{" " * 18}{self.surname}\nСредняя оценка за лекции: {self.__average_rating()}'
+
+    def __lt__(self, other):
+        if isinstance(other, Lecturer):
+            return self.__average_rating() < other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
+
+    def __eq__(self, other):
+        if isinstance(other, Lecturer):
+            return self.__average_rating() == other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
+
+    def __le__(self, other):
+        if isinstance(other, Lecturer):
+            return self.__average_rating() <= other.__average_rating()
+        else:
+            print('Ошибка: сравнение с экземпляром другого класса')
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -116,6 +152,9 @@ student3.courses_in_progress = ['Python', 'GIT', 'История КПСС']
 student3.finished_courses = ['Jawa', 'C++', 'Дизайн']
 student3.grades = {'Jawa':[9, 9, 9], 'Дизайн':[10, 5], 'История КПСС':[5, 5, 6], 'C++':[10, 10], 'GIT':[9, 10]}
 student4 = Student('Girl2', 'Surname4', 'female' )
+student4.courses_in_progress = ['Python', 'GIT', 'История КПСС']
+student4.finished_courses = ['Jawa', 'C++', 'Дизайн']
+student4.grades = {'Jawa':[9, 9, 9], 'Дизайн':[10, 5], 'История КПСС':[5, 5, 6], 'C++':[10, 10], 'GIT':[9, 10]}
 # Лекторы:
 lect1 = Lecturer('Tom', 'Cruise')
 lect1.courses_attached = ['Python', 'GIT', 'SQL', 'Jawa']
@@ -124,6 +163,8 @@ lect2 = Lecturer('Harrison', 'Ford')
 lect2.courses_attached = ['C++', 'Дизайн', 'История КПСС']
 lect2.grades = {'C++':[7, 10, 9], 'Дизайн':[10, 10], 'История КПСС':[3, 4, 3]}
 lect3 = Lecturer('Harry', 'Potter')
+# lect3.courses_attached = ['C++', 'Дизайн', 'История КПСС']
+# lect3.grades = {'C++':[7, 10, 9], 'Дизайн':[10, 10], 'История КПСС':[3, 4, 3]}
 # Рецензенты:
 rev1 = Reviewer('Clint', 'Eastwood')
 rev1.courses_attached = ['Python', 'GIT', 'Дизайн', 'Jawa']
@@ -142,3 +183,17 @@ print('=============================')
 print(student3)
 print('=============================')
 print(student4)
+print(student1 > student2)
+print('=============================')
+print(student1 < student2)
+print('=============================')
+print(student1 == student2)
+print('=============================')
+print(student3 == student4)
+print('=============================')
+print(student3 != student4)
+print('=============================')
+print(student3 <= student4)
+print('=============================')
+print(student3 >= student4)
+print('=============================')
