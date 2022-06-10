@@ -25,6 +25,26 @@ class Student:
         else:
             return 'Ошибка! Оценка не может быть проставлена'
 
+    def __average_rating(self):
+        sum_rating = 0
+        count_rating = 0
+        if self.grades:
+            for grade_list in self.grades.values():
+                sum_rating += sum(grade_list)
+                count_rating += len(grade_list)
+        if count_rating:
+            return round(sum_rating/count_rating, 1)
+        else:
+            return 'У студента пока нет оценок'
+
+    def __str__(self):
+        res_string =  f'Имя:{" " * 32}{self.name}\n'
+        res_string += f'Фамилия:{" " * 28}{self.surname}\n'
+        res_string += f'Средняя оценка за домашние задания: {self.__average_rating()}\n'
+        res_string += f'Курсы в процессе изучения:{" " * 10}{str(self.courses_in_progress).strip("[]")}\n'
+        res_string += f'Завершенные курсы:{" " * 18}{str(self.finished_courses).strip("[]")}'
+        return res_string
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -49,6 +69,21 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
+    def __average_rating(self):
+        sum_rating = 0
+        count_rating = 0
+        if self.grades:
+            for grade_list in self.grades.values():
+                sum_rating += sum(grade_list)
+                count_rating += len(grade_list)
+        if count_rating:
+            return round(sum_rating/count_rating, 1)
+        else:
+            return 'У лектора пока нет оценок'
+
+    def __str__(self):
+        return f'Имя:{" " * 22}{self.name}\nФамилия:{" " * 18}{self.surname}\nСредняя оценка за лекции: {self.__average_rating()}'
+
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
@@ -63,30 +98,47 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка! Оценка не может быть проставлена'
 
-s1 = Student('Guy1', 'Surname1', 'male')
-s1.add_course('Jawa')
-s2 = Student('Guy2', 'Surname2', 'male')
-s2.add_course('SQL')
-s3 = Student('Guy3', 'Surname3', 'male')
-s4 = Student('Girl1', 'Surname4', 'female')
-l1 = Lecturer('Tom', 'Cruise')
-l2 = Lecturer('Harrison', 'Ford')
-l1.add_course('Python')
-l1.add_course('SQL')
-l1.add_course('Jawa')
-l2.add_course('Jawa')
-l2.add_course('C++')
-l2.add_course('Дизайн')
-r1 = Reviewer('Clint', 'Eastwood')
-r1.add_course('Jawa')
-r1.add_course('C++')
-r1.add_course('Дизайн')
-r2 = Reviewer('Tom', 'Hanks')
-print(s1.rate_lecturer(l1, 'Jawa', 8))
-print(s1.rate_lecturer(l2, 'C++'))
-print(l1.grades)
-print(l2.grades)
-print(r1.rate_student(s1, 'Jawa', 5))
-print(r1.rate_student(s2, 'SQL', 8))
-print(s1.grades)
-print(s2.grades)
+    def __str__(self):
+        return f'Имя:     {self.name}\nФамилия: {self.surname}'
+
+# Предметы: 'Python', 'GIT', 'SQL', 'Jawa', 'C++', 'Дизайн', 'История КПСС'
+# Студенты:
+student1 = Student('Guy1', 'Surname1', 'male')
+student1.courses_in_progress = ['Python', 'GIT', 'SQL', 'Jawa']
+student1.finished_courses = ['C++', 'Дизайн']
+student1.grades = {'C++':[4, 8, 9], 'Дизайн':[10, 9], 'Python':[6, 8, 7], 'GIT':[7, 10, 10]}
+student2 = Student('Guy2', 'Surname2', 'male')
+student2.courses_in_progress = ['GIT', 'SQL', 'Jawa', 'C++', 'Дизайн']
+student2.finished_courses = ['История КПСС']
+student2.grades = {'История КПСС':[2, 2, 8], 'Дизайн':[6, 9], 'SQL':[9, 8, 10], 'C++':[7, 9]}
+student3 = Student('Girl1', 'Surname3', 'female')
+student3.courses_in_progress = ['Python', 'GIT', 'История КПСС']
+student3.finished_courses = ['Jawa', 'C++', 'Дизайн']
+student3.grades = {'Jawa':[9, 9, 9], 'Дизайн':[10, 5], 'История КПСС':[5, 5, 6], 'C++':[10, 10], 'GIT':[9, 10]}
+student4 = Student('Girl2', 'Surname4', 'female' )
+# Лекторы:
+lect1 = Lecturer('Tom', 'Cruise')
+lect1.courses_attached = ['Python', 'GIT', 'SQL', 'Jawa']
+lect1.grades = {'SQL':[8, 9, 9], 'GIT':[10, 9], 'Python':[7, 7, 6], 'Jawa':[10, 8, 8]}
+lect2 = Lecturer('Harrison', 'Ford')
+lect2.courses_attached = ['C++', 'Дизайн', 'История КПСС']
+lect2.grades = {'C++':[7, 10, 9], 'Дизайн':[10, 10], 'История КПСС':[3, 4, 3]}
+lect3 = Lecturer('Harry', 'Potter')
+# Рецензенты:
+rev1 = Reviewer('Clint', 'Eastwood')
+rev1.courses_attached = ['Python', 'GIT', 'Дизайн', 'Jawa']
+rev2 = Reviewer('Tom', 'Hanks')
+rev2.courses_attached = ['Python', 'GIT', 'C++', 'SQL', 'История КПСС']
+# print(lect1)
+# print('=============================')
+# print(lect2)
+# print('=============================')
+# print(lect3)
+# print('=============================')
+print(student1)
+print('=============================')
+print(student2)
+print('=============================')
+print(student3)
+print('=============================')
+print(student4)
