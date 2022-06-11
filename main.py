@@ -289,11 +289,6 @@ rev2.courses_attached = ['Python', 'GIT', 'C++', 'SQL', 'История КПСС
 
 # ТЕСТИРОВАНИЕ
 
-<<<<<<< HEAD
-# ТЕСТИРОВАНИЕ
-
-=======
->>>>>>> 8478a992804af497be50197ada8119ea41052e23
 print('=' * 30)
 print('Проставление оценок:')
 print(rev1.rate_student(student1, 'Python', 8))
