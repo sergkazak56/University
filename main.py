@@ -22,7 +22,8 @@ class Student:
         Входной параметр - course (название курса)
         '''
         if course in self.courses_in_progress:
-            self.finished_courses.append(self.courses_in_progress.pop(course))
+            self.courses_in_progress.remove(course)
+            self.finished_courses.append(course)
 
     def rate_lecturer(self, lecturer, course, grade = 10):
         '''
@@ -196,13 +197,39 @@ class Reviewer(Mentor):
 #======================================================================================================================
 # ИСПОЛНЯЕМЫЙ КОД
 
+# Поскольку у студентов и лекторов одинаковый словарь grades и одинаковый метод подсчета
+# средних оценок за курс average_course_grade, то вместо двух функций достаточно одной.
+# Правда функция (average_course_rating) выдаст результат даже, если в списке будут и лекторы и студенты вместе,
+# хотя это маловероятно при использовании баз данных.
+# Можно организовать проверку на однородность списка, как то:
+def list_test(list_of_members):
+    '''
+    Функция проверяет состоит ли список list_of_members только из лекторов или только из студентов
+    Входные параметры - list_of_members (список экземпляров какого-то класса)
+    Результат - True  или False
+    '''
+    member = list_of_members[0]
+    if isinstance(member, Student):
+        for member in list_of_members:
+            if not isinstance(member, Student):
+                return False
+    elif isinstance(member, Lecturer):
+        for member in list_of_members:
+            if not isinstance(member, Lecturer):
+                return False
+    else:
+        return False
+    return True
+
 def average_course_rating(list_of_members, course):
     '''
     Функция подсчета средней оценки лекторов или студентов за определенный курс
-    Входные параметры - list_of_members (список студентов или лекторов), course (название курса)
+    Входные параметры - list_of_members (список студентов или список лекторов), course (название курса)
     Результат - общая средняя оценка за определенный курс
     Если оценок или курсов не найдено, то функция возвращает 0.0
     '''
+    if not list_test(list_of_members):
+        return 'Ошибка: задан неверный список!'
     sum_grades = 0
     count_grades = 0
     for member in list_of_members:
@@ -250,38 +277,52 @@ rev1.courses_attached = ['Python', 'GIT', 'Дизайн', 'Jawa']
 rev2 = Reviewer('Tom', 'Hanks')
 rev2.courses_attached = ['Python', 'GIT', 'C++', 'SQL', 'История КПСС']
 
+# ТЕСТИРОВАНИЕ
 
+print('=' * 30)
+print('Проставление оценок:')
+print(rev1.rate_student(student1, 'Python', 8))
+print(rev2.rate_student(student2, 'История КПСС', 4))
+print(student3.rate_lecturer(lect1, 'GIT', 9))
+print(student4.rate_lecturer(lect2, 'C++'))
+print(student2.rate_lecturer(rev1, 'Jawa', 6))
+print('=' * 30)
+
+# Добавление нового предмета и перемещение предмета в уже изученные:
+student2.add_course('Python')
+student2.finish_course('SQL')
+
+print('Вывод экземпляров классов:')
+print('Лектор:')
+print(lect1)
+print('=' * 30)
+print('Рецензент:')
+print(rev2)
+print('=' * 30)
+print('Студент:')
+print(student2)
+print('=' * 30)
+print('Студент:')
+print(student3)
+print('=' * 30)
+
+print('Сравнение студентов и лекторов:')
+print('lect1 > lect2 -', lect1 > lect2)
+print('lect1 < lect2 -', lect1 < lect2)
+print('lect1 == lect2 -', lect1 == lect2)
+print('student1 == student2 -', student1 == student2)
+print('student1 != student2 -', student1 != student2)
+print('student1 > student2 -', student1 > student2)
+print('student1 <= student2 -', student1 <= student2)
+print('=' * 30)
+
+print('Вывод средних оценок за курс:')
 course = 'Дизайн'
 print(f'Средняя оценка лекторов за курс {course}: {average_course_rating(lecturers_list, course)}')
 print(f'Средняя оценка студентов за курс {course}: {average_course_rating(students_list, course)}')
 course = 'C++'
 print(f'Средняя оценка лекторов за курс {course}: {average_course_rating(lecturers_list, course)}')
 print(f'Средняя оценка студентов за курс {course}: {average_course_rating(students_list, course)}')
+print('=' * 30)
 
-# print(lect1)
-# print('=============================')
-# print(lect2)
-# print('=============================')
-# print(lect3)
-# print('=============================')
-# print(help(student1.average_course_grade))
-# print('=============================')
-# print(student2)
-# print('=============================')
-# print(student3)
-# print('=============================')
-# print(student4)
-# print(lect1 > lect2)
-# print('=============================')
-# print(lect1 < lect2)
-# print('=============================')
-# print(lect1 == lect2)
-# print('=============================')
-# print(student3 == student4)
-# print('=============================')
-# print(lect1 != lect2)
-# print('=============================')
-# print(lect1 <= lect2)
-# print('=============================')
-# print(lect1 >= lect2)
-# print('=============================')
+
